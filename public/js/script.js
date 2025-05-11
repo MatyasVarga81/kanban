@@ -16,7 +16,7 @@ function loadBoard() {
 }
 
 function renderBoard(tasks) {
-  const statuses = ['Backlog', 'To Do', 'In Progress', 'Done'];
+  const statuses = ['Backlog', 'To Do', 'In Progress', 'Waiting for approval', 'Done'];
   const board = document.getElementById('board');
   board.innerHTML = '';
 
@@ -33,35 +33,53 @@ function renderBoard(tasks) {
         card.className = 'card';
         card.draggable = true;
         card.dataset.id = task.id;
-        card.innerHTML = `
-  <strong>${task.title}</strong>
-  <div class="assignee">${task.assignee||''}</div>
-  <div class="due">${task.due_date||''}</div>
-  <div class="note">${task.description||'<i>nincs jegyzet</i>'}</div>
-`;
 
-// dupla-kattintás a jegyzet szerkesztéséhez
-card.querySelector('.note').ondblclick = e => {
-  const newDesc = prompt('Jegyzet szerkesztése:', task.description||'');
-  if (newDesc !== null) {
-    fetch('api/tasks.php', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        id: task.id,
-        title: task.title,
-        description: newDesc,
-        status: task.status,
-        assignee: task.assignee,
-        due_date: task.due_date
-      })
-    }).then(() => {
-      socket.send(JSON.stringify({ event:'task-changed', id: task.id, description: newDesc }));
-      loadBoard();
-    });
-  }
-  e.stopPropagation();
-};
+        // Új HTML-szerkezet a kártyához
+        card.innerHTML = `
+          <div class="card-title">${task.title}</div>
+          <div class="card-field owner">
+            <strong>Owner:</strong><br>
+            ${task.assignee || '<i>–</i>'}
+          </div>
+          <div class="card-field priority">
+            <strong>Priority:</strong><br>
+            <span class="priority-label priority-${task.priority}">
+              ${task.priority}
+            </span>
+          </div>
+          <div class="card-field note">
+            <strong>Information:</strong><br>
+            ${task.description || '<i>nincs jegyzet</i>'}
+          </div>
+          <div class="card-field due">
+            <strong>Due date:</strong><br>
+            ${task.due_date || '<i>–</i>'}
+          </div>
+        `;
+
+        // dupla-kattintás a jegyzet szerkesztéséhez
+        card.querySelector('.note').ondblclick = e => {
+          const newDesc = prompt('Jegyzet szerkesztése:', task.description || '');
+          if (newDesc !== null) {
+            fetch('api/tasks.php', {
+              method: 'PUT',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                id: task.id,
+                title: task.title,
+                description: newDesc,
+                status: task.status,
+                assignee: task.assignee,
+                due_date: task.due_date,
+                priority: task.priority
+              })
+            }).then(() => {
+              socket.emit('task-changed', { id: task.id, description: newDesc });
+              loadBoard();
+            });
+          }
+          e.stopPropagation();
+        };
 
         col.appendChild(card);
       });
@@ -100,7 +118,7 @@ function updateTaskStatus(id, status) {
     .then(() => {
       socket.emit('task-changed', { id, status });
       loadBoard();
-      // értesítés a állapotváltozásról
+      // értesítés az állapotváltozásról
       if (Notification.permission === 'granted') {
         new Notification('Státusz változott', {
           body: `#${id} → ${status}`
@@ -115,7 +133,8 @@ document.getElementById('add-task-btn').onclick = () => {
   if (!title) return;
 
   const assignee = prompt('Felelős?');
-  const dueDate = prompt('Határidő (YYYY-MM-DDTHH:MM)?');
+  const dueDate = prompt('Határidő (YYYY-MM-DD HH:MM)?');
+  const priority = prompt('Prioritás? (low, medium, high, highest)') || 'low';
 
   const task = {
     board_id: boardId,
@@ -123,7 +142,8 @@ document.getElementById('add-task-btn').onclick = () => {
     description: '',
     status: 'Backlog',
     assignee,
-    due_date: dueDate
+    due_date: dueDate,
+    priority
   };
 
   fetch('api/tasks.php', {

@@ -15,11 +15,11 @@ switch ($method) {
   case 'POST':
     $data = json_decode(file_get_contents('php://input'), true);
     $stmt = $pdo->prepare(
-      'INSERT INTO tasks (board_id, title, description, status, assignee, due_date) VALUES (?, ?, ?, ?, ?, ?)'
+      'INSERT INTO tasks (board_id, title, description, status, assignee, due_date, priority) VALUES (?, ?, ?, ?, ?, ?, ?)'
     );
     $stmt->execute([
       $data['board_id'], $data['title'], $data['description'],
-      $data['status'], $data['assignee'], $data['due_date']
+      $data['status'], $data['assignee'], $data['due_date'], $data['priority']
     ]);
     echo json_encode(['id' => $pdo->lastInsertId()]);
     break;
@@ -42,7 +42,7 @@ switch ($method) {
           // teljes rekordfrissítés (pl. jegyzet szerkesztésekor)
           $stmt = $pdo->prepare(
               'UPDATE tasks
-                 SET title=?, description=?, status=?, assignee=?, due_date=?
+                 SET title=?, description=?, status=?, assignee=?, due_date=?, priority=?
                WHERE id=?'
           );
           $stmt->execute([
@@ -51,6 +51,7 @@ switch ($method) {
               $data['status'],
               $data['assignee'],
               $data['due_date'],
+              $data['priority'],
               $data['id']
           ]);
       }

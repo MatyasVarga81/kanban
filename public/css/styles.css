@@ -2,7 +2,27 @@
 body { font-family:Arial; padding:1rem; }
 #board { display:flex; gap:1rem; overflow-x:auto; }
 .column { background:#f4f4f4; padding:0.5rem; border-radius:4px; width:300px; min-height:400px; }
-.card { background:#fff; padding:0.5rem; margin-bottom:0.5rem; border-radius:4px; cursor:grab; }
+.card {
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    margin: 0.5em;
+    padding: 0.5em;
+  }
+  
+  /* A cím blokk halványsárga háttere */
+  .card-title {
+    background-color: #fff9c4; /* halvány sárga */
+    border-radius: 6px;
+    padding: 0.4em;
+    margin-bottom: 0.6em;
+    font-weight: bold;
+  }
+  
+  /* A mezők közös doboza */
+  .card-field {
+    margin-bottom: 0.6em;
+  }
 .card .note {
     margin-top: 0.5em;
     font-size: 0.9em;
@@ -12,4 +32,18 @@ body { font-family:Arial; padding:1rem; }
   .card .note:hover {
     background: #f0f0f0;
   }
+  /* Priority címke stílusok */
+.priority-label {
+    display: inline-block;
+    border-radius: 8px;
+    padding: 2px 6px;
+    font-size: 0.85em;
+    color: #fff;
+  }
+  
+  /* Színek a priority-khez */
+  .priority-low       { background-color: #4caf50; } /* zöld */
+  .priority-medium    { background-color: #eeff41; color: #000; } /* citromsárga – sötét szöveg */
+  .priority-high      { background-color: #ff9800; } /* narancs */
+  .priority-highest   { background-color: #f44336; } /* vörös */
 @media (max-width:600px){ #board{flex-direction:column;} .column{width:100%;} }
