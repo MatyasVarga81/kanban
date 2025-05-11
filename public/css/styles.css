@@ -3,6 +3,7 @@ body { font-family:Arial; padding:1rem; }
 #board { display:flex; gap:1rem; overflow-x:auto; }
 .column { background:#f4f4f4; padding:0.5rem; border-radius:4px; width:300px; min-height:400px; }
 .card {
+    position: relative;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
@@ -32,6 +33,24 @@ body { font-family:Arial; padding:1rem; }
   .card .note:hover {
     background: #f0f0f0;
   }
+
+  .delete-btn {
+    position: absolute;
+    top: 4px;
+    right: 6px;
+    border: none;
+    background: transparent;
+    font-size: 1.2em;
+    line-height: 1;
+    color: #888;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .delete-btn:hover {
+    color: #f44336; /* piros hover */
+  }
+
   /* Priority címke stílusok */
 .priority-label {
     display: inline-block;

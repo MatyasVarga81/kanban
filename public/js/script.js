@@ -36,6 +36,7 @@ function renderBoard(tasks) {
 
         // Új HTML-szerkezet a kártyához
         card.innerHTML = `
+          <button class="delete-btn">&times;</button>
           <div class="card-title">${task.title}</div>
           <div class="card-field owner">
             <strong>Owner:</strong><br>
@@ -59,6 +60,7 @@ function renderBoard(tasks) {
 
         // dupla-kattintás a jegyzet szerkesztéséhez
         card.querySelector('.note').ondblclick = e => {
+          e.stopPropagation();
           const newDesc = prompt('Jegyzet szerkesztése:', task.description || '');
           if (newDesc !== null) {
             fetch('api/tasks.php', {
@@ -78,7 +80,17 @@ function renderBoard(tasks) {
               loadBoard();
             });
           }
+        };
+
+        // törlés gomb eseménykezelő
+        card.querySelector('.delete-btn').onclick = e => {
           e.stopPropagation();
+          if (!confirm('Biztosan törlöd ezt a feladatot?')) return;
+          fetch(`api/tasks.php?id=${task.id}`, { method: 'DELETE' })
+            .then(() => {
+              socket.emit('task-changed', { id: task.id });
+              loadBoard();
+            });
         };
 
         col.appendChild(card);
