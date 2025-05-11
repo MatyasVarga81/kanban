@@ -1,14 +1,15 @@
 {
+    "require": {
+        "php": ">=8.2.12",
+        "cboden/ratchet": "^0.45@dev"
+      },
     "name": "te/kanban-app",
     "description": "Egyszerű Kanban app PHP-vel és WebSocket-tel",
     "type": "project",
-    "require": {
-      "php": ">=7.4",
-      "cboden/ratchet": "^0.5@dev"
-    },
     "autoload": {
       "psr-4": {
         "KanbanApp\\": "src/"
       }
     }
   }
+  
