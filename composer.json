@@ -1,7 +1,7 @@
 {
     "require": {
         "php": ">=8.2.12",
-        "cboden/ratchet": "^0.45@dev"
+        "cboden/ratchet": "^0.4"
       },
     "name": "te/kanban-app",
     "description": "Egyszerű Kanban app PHP-vel és WebSocket-tel",
