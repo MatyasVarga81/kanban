@@ -24,17 +24,40 @@ switch ($method) {
     echo json_encode(['id' => $pdo->lastInsertId()]);
     break;
 
-  case 'PUT':
-    $data = json_decode(file_get_contents('php://input'), true);
-    $stmt = $pdo->prepare(
-      'UPDATE tasks SET title=?, description=?, status=?, assignee=?, due_date=? WHERE id=?'
-    );
-    $stmt->execute([
-      $data['title'], $data['description'],
-      $data['status'], $data['assignee'], $data['due_date'], $data['id']
-    ]);
-    echo json_encode(['status'=> 'updated']);
-    break;
+    case 'PUT':
+      $data = json_decode(file_get_contents('php://input'), true);
+  
+      // HA CSAK status és id jött → csak a státuszt frissítjük
+      if (isset($data['status']) && count($data) === 2) {
+          $stmt = $pdo->prepare(
+              'UPDATE tasks
+                 SET status = ?
+               WHERE id = ?'
+          );
+          $stmt->execute([
+              $data['status'],
+              $data['id']
+          ]);
+      } else {
+          // teljes rekordfrissítés (pl. jegyzet szerkesztésekor)
+          $stmt = $pdo->prepare(
+              'UPDATE tasks
+                 SET title=?, description=?, status=?, assignee=?, due_date=?
+               WHERE id=?'
+          );
+          $stmt->execute([
+              $data['title'],
+              $data['description'],
+              $data['status'],
+              $data['assignee'],
+              $data['due_date'],
+              $data['id']
+          ]);
+      }
+  
+      echo json_encode(['status'=> 'updated']);
+      break;
+  
 
   case 'DELETE':
     $stmt = $pdo->prepare('DELETE FROM tasks WHERE id=?');

@@ -33,7 +33,36 @@ function renderBoard(tasks) {
         card.className = 'card';
         card.draggable = true;
         card.dataset.id = task.id;
-        card.innerHTML = `<strong>${task.title}</strong><br>${task.assignee}`;
+        card.innerHTML = `
+  <strong>${task.title}</strong>
+  <div class="assignee">${task.assignee||''}</div>
+  <div class="due">${task.due_date||''}</div>
+  <div class="note">${task.description||'<i>nincs jegyzet</i>'}</div>
+`;
+
+// dupla-kattintás a jegyzet szerkesztéséhez
+card.querySelector('.note').ondblclick = e => {
+  const newDesc = prompt('Jegyzet szerkesztése:', task.description||'');
+  if (newDesc !== null) {
+    fetch('api/tasks.php', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: task.id,
+        title: task.title,
+        description: newDesc,
+        status: task.status,
+        assignee: task.assignee,
+        due_date: task.due_date
+      })
+    }).then(() => {
+      socket.send(JSON.stringify({ event:'task-changed', id: task.id, description: newDesc }));
+      loadBoard();
+    });
+  }
+  e.stopPropagation();
+};
+
         col.appendChild(card);
       });
 
