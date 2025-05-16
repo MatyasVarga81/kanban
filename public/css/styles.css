@@ -1,81 +1,103 @@
+/* Alapbeállítások */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-  }
-  
-  body {
+}
+
+body {
     font-family: Arial, sans-serif;
     padding: 1rem;
-  }
-  
-  #board {
+}
+
+/* Kanban-tábla konténer */
+#board {
     display: flex;
     gap: 1rem;
     overflow-x: auto;
-  }
-  
-  .column {
+}
+
+/* Oszlopok */
+.column {
     background: #f4f4f4;
     padding: 0.5rem;
     border-radius: 4px;
     width: 300px;
     min-height: 400px;
-  }
-  
-  @media (max-width: 600px) {
+}
+
+@media (max-width: 600px) {
     #board {
-      flex-direction: column;
+        flex-direction: column;
     }
+
     .column {
-      width: 100%;
+        width: 100%;
     }
-  }
-  
-  .card {
+}
+
+/* Kártya alapstílus */
+.card {
     position: relative;
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     margin: 0.5em;
     padding: 0.5em;
-  }
-  
-  /* Cím blokk halványsárga háttere */
-  .card-title {
-    background-color: #fff9c4; /* halvány sárga */
+}
+
+/* Cím blokk halványsárga háttérrel */
+.card-title {
+    background-color: #fff9c4;
     border-radius: 6px;
     padding: 0.4em;
     margin-bottom: 0.6em;
     font-weight: bold;
     cursor: pointer;
-  }
-  
-  /* Mezők közös doboza */
-  .card-field {
+}
+
+/* Mezők közös margója */
+.card-field {
     margin-bottom: 0.6em;
-  }
-  
-  /* Kijelölhető mezők mutatása */
-  .card-field.owner,
-  .card-field.priority,
-  .card-field.due,
-  .card-field.note {
-    cursor: pointer;
-  }
-  
-  /* Információ mező (jegyzet) stílus */
-  .card .note {
+}
+
+    /* Az interaktív mezők jelezve */
+    .card-field.owner,
+    .card-field.priority,
+    .card-field.due,
+    .card-field.note {
+        cursor: pointer;
+    }
+
+/* Jegyzet mező (Information) */
+.card .note {
     margin-top: 0.5em;
     font-size: 0.9em;
     color: #555;
-  }
-  .card .note:hover {
-    background: #f0f0f0;
-  }
-  
-  /* Törlés gomb pozícionálása */
-  .delete-btn {
+}
+
+    .card .note:hover {
+        background: #f0f0f0;
+    }
+
+/* Due date: szöveg és input */
+.card-field.due .due-text {
+    display: inline-block;
+}
+
+.card-field.due .due-input {
+    display: none; /* alapból elrejtve */
+    width: 100%; /* teljes szélesség */
+    margin-top: 0.3em;
+    padding: 0.3em;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 0.9em;
+    box-sizing: border-box;
+}
+
+/* Törlés gomb */
+.delete-btn {
     position: absolute;
     top: 4px;
     right: 6px;
@@ -86,32 +108,42 @@
     color: #888;
     cursor: pointer;
     padding: 0;
-  }
-  .delete-btn:hover {
-    color: #f44336; /* piros hover */
-  }
-  
-  /* Priority címke stílusok */
-  .priority-label {
+}
+
+    .delete-btn:hover {
+        color: #f44336;
+    }
+
+/* Priority címke */
+.priority-label {
     display: inline-block;
     border-radius: 8px;
     padding: 2px 6px;
     font-size: 0.85em;
     color: #fff;
-  }
-  
-  /* Színek a priority-khez */
-  .priority-low {
-    background-color: #4caf50; /* zöld */
-  }
-  .priority-medium {
-    background-color: #eeff41; /* citromsárga */
-    color: #000;
-  }
-  .priority-high {
-    background-color: #ff9800; /* narancs */
-  }
-  .priority-highest {
-    background-color: #f44336; /* vörös */
-  }
-  
+}
+
+/* Priority színek */
+.priority-low {
+    background-color: #4caf50; 
+}
+
+.priority-medium {
+    background-color: #eeff41; 
+    color: #000; 
+}
+
+.priority-high {
+    background-color: #ff9800; 
+}
+
+.priority-highest {
+    background-color: #f44336; 
+}
+
+/* Flatpickr override-ek  */
+.flatpickr-calendar {
+    font-size: 0.9em;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}

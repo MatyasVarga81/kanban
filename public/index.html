@@ -1,24 +1,29 @@
 <!DOCTYPE html>
 <html lang="hu">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kanban App</title>
-  <link rel="stylesheet" href="css/styles.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban App</title>
+    <link rel="stylesheet" href="css/styles.css">
+
+    <!-- Flatpickr CSS (date-time picker) -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 </head>
 <body>
-  <header>
-    <h1>Kanban Projektmenedzsment</h1>
-  </header>
+    <header>
+        <h1>Kanban Projektmenedzsment</h1>
+    </header>
 
-  <main>
-    <section id="board"></section>
-    <button id="add-task-btn">Új feladat</button>
-  </main>
+    <main>
+        <section id="board"></section>
+        <button id="add-task-btn">Új feladat</button>
+    </main>
 
-  <!-- WebSocket kliens -->
-  <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
-  <!-- App logika -->
-  <script src="js/script.js"></script>
+    <!-- Socket.IO kliens -->
+    <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- App logika -->
+    <script src="js/script.js"></script>
 </body>
 </html>
